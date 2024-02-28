@@ -5,25 +5,40 @@ on:
     tags:
       - v*
 
+env:
+  GOVERSION: stable
+
 jobs:
-  build:
+  release:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Set up Go ${{ env.GOVERSION }}
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GOVERSION }}
+          check-latest: true
+
+      - name: Build Module
+        run: go build -o buddy
+
+      - name: Get Version
+        id: version
+        run: echo "version=$(./buddy get version)" >> "$GITHUB_OUTPUT"
+
       - name: Generate build files
-        uses: thatisuday/go-cross-build@v1
+        uses: thatisuday/go-cross-build@v1.0.2
         with:
           platforms: "linux/amd64, linux/ppc64le, darwin/amd64, darwin/arm64, windows/amd64"
-          package: "."
-          name: "buddy"
+          package: ""
+          name: "buddy-${{ steps.version.outputs.version }}"
           compress: true
           dest: "dist"
       - name: Publish Binaries
         uses: svenstaro/upload-release-action@v2
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
           release_name: Release ${{ github.ref }}
           tag: ${{ github.ref }}
           file: dist/*
