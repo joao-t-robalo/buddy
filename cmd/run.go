@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"strings"
 
 	"github.com/dreadster3/buddy/models"
 	"github.com/spf13/cobra"
