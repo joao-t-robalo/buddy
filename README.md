@@ -39,14 +39,14 @@ Here is an example.
 
 You can add scripts to the `scripts` object in the `buddy.json` file.
 
-```json
+```jsonc
 {
   "name": "<project-name>",
   "version": "0.0.1",
   "description": "A new buddy project",
   "author": "Anonymous",
   "scripts": {
-    "start": "go run main.go",
+    "start": "go run main.go ${1} ${2}", //where ${1} and ${2} will be populated with the first and second argument of your buddy run start cmd
     "build": "go build -o dist/main main.go",
     "test": "go test"
   }
@@ -58,7 +58,7 @@ You can add scripts to the `scripts` object in the `buddy.json` file.
 You can run these scripts using the `buddy run` command.
 
 ```bash
-buddy run <script-name>
+buddy run <script-name> <script-args>
 ```
 
 Use the `buddy run --list` command to list all the scripts in the `buddy.json` file.
